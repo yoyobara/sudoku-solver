@@ -35,9 +35,15 @@ function Board({setAtIndex}) {
 
 function SolveButton(props) {
     let click = () => {
-        fetch("/api/solve", {method: "POST", body: JSON.stringify({
-            state: props.board
-        })}).then((r) => {console.log(r);})
+        fetch("/api/solve", {
+            method: "POST", 
+            body: JSON.stringify({
+                state: props.board
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((r) => {console.log(r);})
     };
 
     return <button onClick={click}/> 
