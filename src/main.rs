@@ -1,16 +1,12 @@
+mod board;
 use rocket::{fs::{FileServer, relative}, serde::json::Json};
-use serde::Deserialize;
+use board::Board;
 
 #[macro_use] extern crate rocket;
 
-#[derive(Deserialize)]
-struct SudokuBoard {
-    state: Vec<String>
-}
-
 #[post("/solve", format = "json", data = "<req_data>")]
-fn solve(req_data: Json<SudokuBoard>) {
-    println!("{:?}", req_data.state);
+fn solve(req_data: Json<Board>) {
+    println!("{:?}", req_data);
 }
 
 #[rocket::launch]

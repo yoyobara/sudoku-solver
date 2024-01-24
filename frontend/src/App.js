@@ -38,7 +38,7 @@ function SolveButton(props) {
         fetch("/api/solve", {
             method: "POST", 
             body: JSON.stringify({
-                state: props.board
+                state: props.board.map((x) => (x == "" ? 0 : parseInt(x)))
             }),
             headers: {
                 'Content-Type': 'application/json'
