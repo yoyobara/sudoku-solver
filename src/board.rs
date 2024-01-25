@@ -1,4 +1,4 @@
-use std::array;
+use std::{array, collections::HashSet, hash::Hash};
 use serde::Deserialize;
 
 const EMPTY: i8 = 0;
@@ -10,17 +10,29 @@ pub struct Board {
 
 impl Board {
 
+    pub fn example() -> Self {
+        Board{
+            state: vec![5, 3, 0, 0, 7, 0, 0, 0, 0,
+                        6, 0, 0, 1, 9, 5, 0, 0, 0,
+                        0, 9, 8, 0, 0, 0, 0, 6, 0,
+                        8, 0, 0, 0, 6, 0, 0, 0, 3,
+                        4, 0, 0, 8, 0, 3, 0, 0, 1,
+                        7, 0, 0, 0, 2, 0, 0, 0, 6,
+                        0, 6, 0, 0, 0, 0, 2, 8, 0,
+                        0, 0, 0, 4, 1, 9, 0, 0, 5,
+                        0, 0, 0, 0, 8, 0, 0, 7, 9]
+        }
+    }
+
     fn index_ok(row: usize, column: usize) -> bool {
-        let rng = 1..=9;
+        let rng = 0..=8;
         rng.contains(&row) && rng.contains(&column)
     }
 
-    /* 
-     * consumes an Iterator and checks 
-     * whether a value appears only once in it 
-     */
-    fn appears_once<T: PartialEq>(it: impl Iterator<Item = T>, val: T) -> bool {
-        it.filter(|x| *x == val).count() == 1
+    fn has_unique_non_empty<'a>(mut iter: impl Iterator<Item = &'a i8>) -> bool
+    {
+        let mut uniq = HashSet::new();
+        iter.all(move |x| *x == 0 || uniq.insert(x))
     }
 
     fn get(&self, row: usize, column: usize) -> Option<&i8> {
@@ -59,7 +71,7 @@ impl Board {
         let mut empty_spots: Vec<(usize, usize)> = Vec::new();
 
         for (i, cell) in self.state.iter().enumerate() {
-            if *cell == EMPTY {
+           if *cell == EMPTY {
                 empty_spots.push((i / 9, i % 9));
             }
         }
@@ -81,14 +93,14 @@ impl Board {
                 if empty_index == 0 {
                     return false;
                 }
+                empty_index -= 1;
             }
             else {
                 *val += 1;
-                let val = self.get(srow, scol).unwrap();
 
-                if Self::appears_once(self.get_box(srow, scol).iter(), val) && 
-                   Self::appears_once(self.get_row(srow).iter(), val) && 
-                   Self::appears_once(self.get_column(scol).iter(), val){
+                if Self::has_unique_non_empty(self.get_box(srow, scol).iter()) && 
+                   Self::has_unique_non_empty(self.get_row(srow).iter()) && 
+                   Self::has_unique_non_empty(self.get_column(scol).iter()){
 
                        empty_index += 1;
                        if empty_index == empty_spots.len() {
