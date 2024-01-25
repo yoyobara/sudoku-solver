@@ -1,0 +1,49 @@
+body {
+    background-color: #000;
+}
+.App {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+
+    background-color: #303030;
+
+    border-radius: 40px;
+    padding: 50px;
+}
+
+.Cell {
+    width: 30px;
+    height: 30px;
+
+    font-size: 30px;
+    text-align: center;
+}
+
+.CellSolved {
+    color: #ff7582;
+}
+
+.Row {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.Board {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.SolveButton {
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+    background-color: #ff7582;
+}
+
+.ClearButton {
+
+}

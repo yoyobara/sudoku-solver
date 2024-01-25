@@ -1,19 +1,22 @@
 import {useState} from "react";
+import styles from "./App.module.css"
 
 function Cell({i, j, setAtIndex}) {
     const [val, setVal] = useState("");
+
+    const onChange = (e) => {
+        setVal(e.target.value);
+        setAtIndex(i * 9 + j, e.target.value);
+    }
+
     return (
         <input
+            className={styles.Cell}
             type="text"
             maxLength="1"
             value={val}
-            onChange={(e) => {setVal(e.target.value); setAtIndex(i * 9 + j, e.target.value)}}
-            style={{
-                width: "30px",
-                height: "30px",
-                fontSize: "30px",
-                textAlign: "center",
-            }}
+            onChange={onChange}
+            onFocus={(e) => e.target.select()}
         />
     );
 }
@@ -22,7 +25,7 @@ function Board({setAtIndex}) {
     let arr = Array.from(
         { length: 9 },
         (_, i) =>
-            <div>
+            <div className={styles.Row}>
             {Array.from(
                 { length: 9 },
                 (_, j) => <Cell i={i} j={j} setAtIndex={setAtIndex}/>
@@ -30,7 +33,11 @@ function Board({setAtIndex}) {
             </div>
     );
 
-    return arr;
+    return (
+        <div className={styles.Board}>
+            {arr}
+        </div>
+    )
 }
 
 function SolveButton(props) {
@@ -38,7 +45,7 @@ function SolveButton(props) {
         fetch("/api/solve", {
             method: "POST", 
             body: JSON.stringify({
-                state: props.board.map((x) => (x == "" ? 0 : parseInt(x)))
+                state: props.board.map((x) => (x === "" ? 0 : parseInt(x)))
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +53,11 @@ function SolveButton(props) {
         }).then((r) => {console.log(r);})
     };
 
-    return <button onClick={click}/> 
+    return (
+        <button className={styles.SolveButton} onClick={click}>
+            Solve!
+        </button>
+    )
 }
 
 function App() {
@@ -58,7 +69,7 @@ function App() {
     }
 
     return (
-        <div>
+        <div className={styles.App}>
             <Board setAtIndex={setAtIndex}/>
             <SolveButton board={board}/>
         </div>
