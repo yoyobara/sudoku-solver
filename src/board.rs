@@ -1,4 +1,4 @@
-use std::ops::RangeBounds;
+use std::{ops::RangeBounds, array, vec};
 
 use serde::Deserialize;
 
@@ -32,5 +32,35 @@ impl Board {
         else {
             None
         }
+    }
+
+    pub fn get_row(&self, row: usize) -> [i8; 9] {
+        array::from_fn(|i| self.get(row, i).unwrap().to_owned())
+    }
+
+    pub fn get_column(&self, column: usize) -> [i8; 9] {
+        array::from_fn(|i| self.get(i, column).unwrap().to_owned())
+    }
+
+    pub fn get_box(&self, row: usize, column: usize) -> [i8; 9] {
+        let box_offset = (row / 3 * 3, column / 3 * 3);
+
+        array::from_fn(|i| self.get(box_offset.0 + i / 3, box_offset.1 + i % 3).unwrap().to_owned())
+    }
+
+    fn get_empty_spots(&self) -> Vec<(usize, usize)> {
+        let mut empty_spots: Vec<(usize, usize)> = Vec::new();
+
+        for (i, cell) in self.state.iter().enumerate() {
+            if *cell == EMPTY {
+                empty_spots.push((i / 9, i % 9));
+            }
+        }
+
+        empty_spots
+    }
+
+    pub fn solve(&self) {
+        let empty_spots = self.get_empty_spots();
     }
 }
