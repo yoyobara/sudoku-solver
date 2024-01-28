@@ -1,14 +1,18 @@
-use std::{array, collections::HashSet, hash::Hash};
-use serde::Deserialize;
+use std::{array, collections::HashSet};
+use serde::{Deserialize, Serialize};
 
 const EMPTY: i8 = 0;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Board {
     state: Vec<i8> // 0 means empty
 }
 
 impl Board {
+
+    pub fn empty() -> Board {
+        Board{state: vec![]}
+    }
 
     fn index_ok(row: usize, column: usize) -> bool {
         let rng = 0..=8;
@@ -70,6 +74,8 @@ impl Board {
         let mut empty_index: usize = 0;
 
         loop {
+
+            println!("working");
 
             let (srow, scol) = empty_spots[empty_index];
             let val = self.get_mut(srow, scol).unwrap();
