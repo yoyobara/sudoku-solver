@@ -1,34 +1,28 @@
 import {useState} from "react";
 import styles from "./App.module.css"
 
-function Cell({i, j, setAtIndex}) {
-    const [val, setVal] = useState("");
-
-    const onChange = (e) => {
-        setVal(e.target.value);
-        setAtIndex(i * 9 + j, e.target.value);
-    }
-
+function Cell({board, setBoard, i, j}) {
+    let idx = i * 9 + j;
     return (
         <input
             className={styles.Cell}
             type="text"
             maxLength="1"
-            value={val}
-            onChange={onChange}
+            value={board[idx]}
+            onChange={(e) => {setBoard(board.map((v, i) => i === idx ? e.target.value : v))}}
             onFocus={(e) => e.target.select()}
         />
     );
 }
 
-function Board({setAtIndex}) {
+function Board({board, setBoard}) {
     let arr = Array.from(
         { length: 9 },
         (_, i) =>
             <div className={styles.Row}>
             {Array.from(
                 { length: 9 },
-                (_, j) => <Cell i={i} j={j} setAtIndex={setAtIndex}/>
+                (_, j) => <Cell i={i} j={j} board={board} setBoard={setBoard}/>
             )}
             </div>
     );
@@ -40,38 +34,35 @@ function Board({setAtIndex}) {
     )
 }
 
-function SolveButton(props) {
-    let click = () => {
-        fetch("/api/solve", {
-            method: "POST", 
-            body: JSON.stringify({
-                state: props.board.map((x) => (x === "" ? 0 : parseInt(x)))
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((r) => {console.log(r);})
-    };
-
+function SolveButton({solveClick}) {
     return (
-        <button className={styles.SolveButton} onClick={click}>
+        <button className={styles.SolveButton} onClick={solveClick}>
             Solve!
         </button>
     )
 }
 
 function App() {
-    let board = new Array(81).fill("");
+    let [board, setBoard] = useState(Array(81).fill(""));
 
-    const setAtIndex = (i, v) => {
-        console.log(`are you serious (${i}, ${v})`)
-        board[i] = v;
-    }
+    let solveClick = () => {
+        fetch("/api/solve", {
+            method: "POST", 
+            body: JSON.stringify({
+                state: board.map((x) => (x === "" ? 0 : parseInt(x)))
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((r) => {
+
+        })
+    };
 
     return (
         <div className={styles.App}>
-            <Board setAtIndex={setAtIndex}/>
-            <SolveButton board={board}/>
+            <Board board={board} setBoard={setBoard}/>
+            <SolveButton solveClick={solveClick}/>
         </div>
     );
 }
