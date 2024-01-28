@@ -22,7 +22,7 @@ function Board({board, setBoard}) {
             <div className={styles.Row}>
             {Array.from(
                 { length: 9 },
-                (_, j) => <Cell i={i} j={j} board={board} setBoard={setBoard}/>
+                (_, j) => <Cell key={i.toString() + j.toString()} i={i} j={j} board={board} setBoard={setBoard}/>
             )}
             </div>
     );
