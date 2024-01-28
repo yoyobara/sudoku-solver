@@ -46,6 +46,7 @@ function App() {
     let [board, setBoard] = useState(Array(81).fill(""));
 
     let solveClick = () => {
+
         fetch("/api/solve", {
             method: "POST", 
             body: JSON.stringify({
@@ -54,9 +55,10 @@ function App() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then((r) => {
-
-        })
+        }).then((r) => r.json().then((j) => {
+                let state = j['board']['state'];
+                setBoard(state);
+        }))
     };
 
     return (
