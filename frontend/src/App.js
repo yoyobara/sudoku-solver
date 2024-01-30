@@ -76,7 +76,7 @@ function App() {
                 'Content-Type': 'application/json'
             }
         }).then((r) => r.json().then((j) => {
-                let state = j['board']['state'];
+                let state = j['state'];
                 setBoard(state);
         }))
     };
