@@ -15,6 +15,7 @@ function Cell({board, setBoard, i, j, boardAutoCompleted}) {
             type="text"
             maxLength="1"
             value={board[idx]}
+            disabled={boardAutoCompleted[idx]}
             onChange={(e) => {setBoard(board.map((v, i) => i === idx ? e.target.value : v))}}
             onFocus={(e) => e.target.select()}
         />
@@ -82,7 +83,8 @@ function App() {
     };
 
     let resetClick = () => {
-
+        setBoard(Array(81).fill(""))
+        setBoardAutoCompleted(Array(81).fill(false))
     }
 
     return (
