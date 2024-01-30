@@ -38,12 +38,19 @@ body {
 }
 
 .SolveButton {
+    display: inline-block;
     width: 200px;
     height: 50px;
     font-size: 30px;
     background-color: #ff7582;
+    margin: 20px;
 }
 
-.ClearButton {
-
+.ResetButton {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+    background-color: #ff9282;
+    margin: 20px;
 }

@@ -3,17 +3,20 @@ import styles from "./App.module.css"
 
 function Cell({board, setBoard, i, j, boardAutoCompleted}) {
     let idx = i * 9 + j;
+    let classes = [styles.Cell]
+
+    if (boardAutoCompleted[idx]) {
+        classes.push(styles.CellSolved)
+    }
+
     return (
         <input
-            className={styles.Cell}
+            className={classes.join(" ")}
             type="text"
             maxLength="1"
             value={board[idx]}
             onChange={(e) => {setBoard(board.map((v, i) => i === idx ? e.target.value : v))}}
             onFocus={(e) => e.target.select()}
-            style={{
-                color: boardAutoCompleted[idx] ? 'blue' : 'black'
-            }}
         />
     );
 }
@@ -45,6 +48,14 @@ function SolveButton({solveClick}) {
     )
 }
 
+function ResetButton({resetClick}) {
+    return (
+        <button className={styles.ResetButton} onClick={resetClick}>
+            Reset
+        </button>
+    )
+}
+
 function App() {
     let [board, setBoard] = useState(Array(81).fill(""));
 
@@ -70,10 +81,17 @@ function App() {
         }))
     };
 
+    let resetClick = () => {
+
+    }
+
     return (
         <div className={styles.App}>
             <Board board={board} setBoard={setBoard} boardAutoCompleted={boardAutoCompleted}/>
-            <SolveButton solveClick={solveClick}/>
+            <div>
+                <SolveButton solveClick={solveClick}/>
+                <ResetButton resetClick={resetClick}/>
+            </div>
         </div>
     );
 }
